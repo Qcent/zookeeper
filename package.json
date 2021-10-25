@@ -1,0 +1,23 @@
+{
+  "name": "zookeeper",
+  "version": "1.0.0",
+  "description": "node.js / express server for zoo animal and keeper database",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qcent/zookeeper.git"
+  },
+  "author": "Dave Quinn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Qcent/zookeeper/issues"
+  },
+  "homepage": "https://github.com/Qcent/zookeeper#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
