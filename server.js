@@ -1,13 +1,17 @@
 const express = require('express');
+
+// set default port to heroku environment variable or 3001
+const PORT = process.env.PORT || 3001;
+
 //instantiate the server
 const app = express();
 
 //import animals data
 const { animals } = require('./data/animals');
 
-//set server to listen on port 3001
-app.listen(3001, () => {
-    console.log('API server running on port 3001!')
+//set server to listen on port ${PORT}
+app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`)
 });
 
 //function to filer by query perameters
