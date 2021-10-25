@@ -14,7 +14,7 @@ app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`)
 });
 
-//function to filer by query perameters
+//function to filer by query parameters
 const filterByQuery = (query, animalsArray) => {
     let personalityTraitsArray = [];
     // Note that we save the animalsArray as filteredResults here:
@@ -54,6 +54,11 @@ const filterByQuery = (query, animalsArray) => {
     return filteredResults;
 };
 
+const findById = (id, animalsArray) => {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+}
+
 // add a route for the front end to request from
 app.get('/api/animals', (req, res) => {
     // send the animals or filtered animals as json data in response
@@ -62,4 +67,14 @@ app.get('/api/animals', (req, res) => {
         results = filterByQuery(req.query, results);
     }
     res.json(results);
+});
+
+// add a second route with an :id for parameterName
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result);
+    } else {
+        res.sendStatus(404);
+    }
 });
