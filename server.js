@@ -57,6 +57,7 @@ app.post('/api/roboscores', (req, res) => {
 });
 
 const validateRoboScore = (hiScore) => {
+    console.dir(hiScore)
     if (!hiScore.robot || typeof hiScore.robot !== 'string') {
         console.log(`Robot Error : ${typeof hiScore.robot}`);
         return false;
