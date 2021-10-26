@@ -2,10 +2,10 @@ const $animalForm = document.querySelector('#animals-form');
 const $displayArea = document.querySelector('#display-area');
 
 const printResults = resultArr => {
-  console.log(resultArr);
+        console.log(resultArr);
 
-  const animalHTML = resultArr.map(({ id, name, personalityTraits, species, diet }) => {
-    return `
+        const animalHTML = resultArr.map(({ id, name, personalityTraits, species, diet }) => {
+                    return `
   <div class="col-12 col-md-5 mb-3">
     <div class="card p-3" data-id=${id}>
       <h4 class="text-primary">${name}</h4>
@@ -45,6 +45,7 @@ const getAnimals = (formData = {}) => {
 };
 
 const handleGetAnimalsSubmit = event => {
+  /*
   event.preventDefault();
   const dietRadioHTML = $animalForm.querySelectorAll('[name="diet"]');
   let diet;
@@ -71,6 +72,29 @@ const handleGetAnimalsSubmit = event => {
   const animalObject = { diet, personalityTraits };
 
   getAnimals(animalObject);
+  */
+
+  fetch('/api/animals', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      
+    },
+    body: JSON.stringify(animalObject)
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      alert('Error: ' + response.statusText);
+    })
+    .then(postResponse => {
+      console.log(postResponse);
+      alert('Thank you for adding an animal!');
+    });
+
+
 };
 
 $animalForm.addEventListener('submit', handleGetAnimalsSubmit);

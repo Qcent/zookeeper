@@ -17,10 +17,7 @@ app.use(express.static('public'));
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested, Content-Type, Accept Authorization"
-    )
+    res.header("Access-Control-Allow-Headers", "*")
     if (req.method === "OPTIONS") {
         res.header(
             "Access-Control-Allow-Methods",
@@ -53,8 +50,13 @@ app.post('/api/roboscores', (req, res) => {
         res.status(400).send('The High Score is not properly formatted. ' + req.body);
         console.dir(req.body)
     } else {
-        setNewHighScore(req.body);
-        res.json(req.body);
+        setNewHighScore(req.body)
+            .then(data => {
+                res.json(data);
+            }).catch(err => {
+                console.log(err);
+                res.json(err);
+            });
     }
 });
 
@@ -83,25 +85,63 @@ const validateRoboScore = (hiScore) => {
     return true;
 };
 
-const setNewHighScore = (newScore) => {
-    newScore.points > highscore.points ? saveHighScore(newScore) : console.log("NEGATIVE! NOT HIGH ENOUGH");
+const setNewHighScore = newScore => {
+    return new Promise((res, rej) => {
+        if (newScore.points > highscore.points) {
+            saveHighScore(newScore)
+                .then(data => {
+                    if (data.ok === true) {
+                        res({
+                            ok: true,
+                            message: "New High Score Accepted!"
+                        })
+                    } else {
+                        rej({
+                            ok: false,
+                            message: "Server Error -- Failed to write data!"
+                        });
+                    }
+                })
+        } else {
+            rej({
+                ok: false,
+                message: "NEGATIVE! NOT HIGH ENOUGH"
+            });
+        }
+    });
 };
 
 const saveHighScore = (newScore) => {
-    console.log("NEW HIGH SCORE");
-    console.log("Writing this " + JSON.stringify({ highscore: newScore }));
 
-    highscore = newScore;
-    fs.writeFileSync(
-        path.join(__dirname, './data/roboHiScore.json'),
-        JSON.stringify({ highscore: newScore })
-    );
+        console.log("NEW HIGH SCORE SUBMITED");
+        console.dir(newScore);
+        highscore = newScore;
 
-    console.log('Finished writing')
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, './data/roboHiScore.json'),
+                JSON.stringify({ highscore: newScore }),
+                err => {
+                    // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+                    if (err) {
+                        reject(err);
+                        // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
+                        return;
+                    }
+
+                    console.log("HIGH SCORE WRITTEN TO DB!");
+                    // if everything went well, resolve the Promise and send the successful data to the `.then()` method
+                    resolve({
+                        ok: true,
+                        message: 'High Score Written'
+                    });
+                });
+        });
 
 
-};
-/** END OF HIGH SCORE **/
+
+    }
+    /** END OF HIGH SCORE **/
 
 
 //function to filer by query parameters
