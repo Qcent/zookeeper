@@ -48,7 +48,7 @@ app.post('/api/roboscores', (req, res) => {
     // req.body is where our incoming content will be
     // if any data in req.body is incorrect, send 400 error back
     if (!validateRoboScore(req.body)) {
-        res.status(400).send('The High Score is not properly formatted.');
+        res.status(400).send('The High Score is not properly formatted. ' + req.body);
         console.dir(req.body)
     } else {
         setNewHighScore(req.body);
