@@ -2,10 +2,10 @@ const $animalForm = document.querySelector('#animals-form');
 const $displayArea = document.querySelector('#display-area');
 
 const printResults = resultArr => {
-  console.log(resultArr);
+        console.log(resultArr);
 
-  const animalHTML = resultArr.map(({ id, name, personalityTraits, species, diet }) => {
-    return `
+        const animalHTML = resultArr.map(({ id, name, personalityTraits, species, diet }) => {
+                    return `
   <div class="col-12 col-md-5 mb-3">
     <div class="card p-3" data-id=${id}>
       <h4 class="text-primary">${name}</h4>
@@ -39,7 +39,7 @@ const getAnimals = (formData = {}) => {
       return response.json();
     })
     .then(animalData => {
-      console.log(animalData);
+      //console.log(animalData);
       printResults(animalData);
     });
 };
