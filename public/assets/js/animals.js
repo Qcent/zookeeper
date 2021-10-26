@@ -2,7 +2,7 @@ const $animalForm = document.querySelector('#animals-form');
 const $displayArea = document.querySelector('#display-area');
 
 const printResults = resultArr => {
-        console.log(resultArr);
+        //console.log(resultArr);
 
         const animalHTML = resultArr.map(({ id, name, personalityTraits, species, diet }) => {
                     return `
@@ -29,7 +29,7 @@ const getAnimals = (formData = {}) => {
     queryUrl += `${key}=${value}&`;
   });
 
-  console.log(queryUrl);
+ // console.log(queryUrl);
 
   fetch(queryUrl)
     .then(response => {
@@ -39,13 +39,13 @@ const getAnimals = (formData = {}) => {
       return response.json();
     })
     .then(animalData => {
-      console.log(animalData);
+     // console.log(animalData);
       printResults(animalData);
     });
 };
 
 const handleGetAnimalsSubmit = event => {
-  /*
+  
   event.preventDefault();
   const dietRadioHTML = $animalForm.querySelectorAll('[name="diet"]');
   let diet;
@@ -71,9 +71,8 @@ const handleGetAnimalsSubmit = event => {
 
   const animalObject = { diet, personalityTraits };
 
-  getAnimals(animalObject);
-  */
-
+  //getAnimals(animalObject);
+  
   fetch('/api/animals', {
     method: 'POST',
     headers: {
