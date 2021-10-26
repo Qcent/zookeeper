@@ -12,6 +12,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+// set up front end data to be located in ./public
+app.use(express.static('public'));
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -101,10 +103,6 @@ const saveHighScore = (newScore) => {
 };
 /** END OF HIGH SCORE **/
 
-//set server to listen on port ${PORT}
-app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`)
-});
 
 //function to filer by query parameters
 const filterByQuery = (query, animalsArray) => {
@@ -179,6 +177,9 @@ const validateAnimal = (animal) => {
     }
     return true;
 };
+/************** */
+/***  ROUTES  ***/
+/************** */
 
 // add a route for the front end to request from
 app.get('/api/animals', (req, res) => {
@@ -215,4 +216,19 @@ app.post('/api/animals', (req, res) => {
         const animal = createNewAnimal(req.body, animals);
         res.json(animal);
     }
+});
+
+// Serve up the Index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+
+/**************/
+/*** LISTEN ***/
+/************ */
+
+//set server to listen on port ${PORT}
+app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`)
 });
