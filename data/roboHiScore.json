@@ -1,1 +1,9 @@
-{"highscore":{"robot":"test-0","trainer":"Davey-Q","rounds":"13","score":"56822","points":"420"}}
+{
+    "highscore": {
+        "robot": "Andy  D'Botto",
+        "trainer": "Mark B",
+        "score": "56",
+        "rounds": "4",
+        "points": "600"
+    }
+}

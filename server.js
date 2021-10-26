@@ -15,6 +15,11 @@ app.use(express.json());
 // set up front end data to be located in ./public
 app.use(express.static('public'));
 
+//import animals data
+const { animals } = require('./data/animals');
+
+//////////////////////////////
+/* HIGH SCORE SERVER */
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
     res.header("Access-Control-Allow-Headers", "*")
@@ -27,22 +32,14 @@ app.use((req, res, next) => {
     }
     next()
 });
-
-
-//import animals data
-const { animals } = require('./data/animals');
-
-/* HIGH SCORE SERVER */
 //import highscore data
 let { highscore } = require('./data/roboHiScore');
-
 // add a route for the front end to request from
 app.get('/api/roboscores', (req, res) => {
     // send the animals or filtered animals as json data in response
 
     res.json(highscore);
 });
-
 app.post('/api/roboscores', (req, res) => {
     // req.body is where our incoming content will be
     // if any data in req.body is incorrect, send 400 error back
@@ -59,7 +56,6 @@ app.post('/api/roboscores', (req, res) => {
             });
     }
 });
-
 const validateRoboScore = (hiScore) => {
     console.dir(hiScore)
     if (!hiScore.robot || typeof hiScore.robot !== 'string') {
@@ -84,7 +80,6 @@ const validateRoboScore = (hiScore) => {
     }
     return true;
 };
-
 const setNewHighScore = newScore => {
     return new Promise((res, rej) => {
         if (newScore.points > highscore.points) {
@@ -110,39 +105,38 @@ const setNewHighScore = newScore => {
         }
     });
 };
-
 const saveHighScore = (newScore) => {
 
-        console.log("NEW HIGH SCORE SUBMITED");
-        console.dir(newScore);
-        highscore = newScore;
+    console.log("NEW HIGH SCORE SUBMITED");
+    console.dir(newScore);
+    highscore = newScore;
 
-        return new Promise((resolve, reject) => {
-            fs.writeFile(
-                path.join(__dirname, './data/roboHiScore.json'),
-                JSON.stringify({ highscore: newScore }),
-                err => {
-                    // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
-                    if (err) {
-                        reject(err);
-                        // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
-                        return;
-                    }
+    return new Promise((resolve, reject) => {
+        fs.writeFile(
+            path.join(__dirname, './data/roboHiScore.json'),
+            JSON.stringify({ highscore: newScore }),
+            err => {
+                // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
+                if (err) {
+                    reject(err);
+                    // return out of the function here to make sure the Promise doesn't accidentally execute the resolve() function as well
+                    return;
+                }
 
-                    console.log("HIGH SCORE WRITTEN TO DB!");
-                    // if everything went well, resolve the Promise and send the successful data to the `.then()` method
-                    resolve({
-                        ok: true,
-                        message: 'High Score Written'
-                    });
+                console.log("HIGH SCORE WRITTEN TO DB!");
+                // if everything went well, resolve the Promise and send the successful data to the `.then()` method
+                resolve({
+                    ok: true,
+                    message: 'High Score Written'
                 });
-        });
+            });
+    });
 
 
 
-    }
-    /** END OF HIGH SCORE **/
-
+};
+/** END OF HIGH SCORE **/
+//////////////////////////////
 
 //function to filer by query parameters
 const filterByQuery = (query, animalsArray) => {
@@ -246,9 +240,6 @@ app.post('/api/animals', (req, res) => {
     // set id based on what the next index of the array will be
     req.body.id = animals.length.toString();
 
-    // add animal to json file and animals array in this function
-    const animal = createNewAnimal(req.body, animals);
-
     // if any data in req.body is incorrect, send 400 error back
     if (!validateAnimal(req.body)) {
         res.status(400).send('The animal is not properly formatted.');
@@ -262,7 +253,18 @@ app.post('/api/animals', (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'));
 });
-
+//Animals HTML
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+//ZooKeepers HTML
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+// DEFAULT ROUTE
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
 
 /**************/
 /*** LISTEN ***/

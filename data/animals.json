@@ -110,31 +110,23 @@
       "id": "10"
     },
     {
-      "jim": "Larry",
-      "species": "lemur",
+      "name": "KimChi",
+      "species": "Dog",
       "diet": "omnivore",
       "personalityTraits": [
-        "hungry"
+        "hungry",
+        "loving",
+        "goofy"
       ],
       "id": "11"
     },
     {
-      "name": "Emily",
-      "species": "People",
-      "diet": "eats it all",
+      "name": "KimChang",
+      "species": "Doggo",
+      "diet": "omnivore",
       "personalityTraits": [
-        "loving",
-        "awesome"
-      ],
-      "id": "12"
-    },
-    {
-      "name": "Emily",
-      "species": "People",
-      "diet": "eats it all",
-      "personalityTraits": [
-        "loving",
-        "awesome"
+        "zany",
+        "loving"
       ],
       "id": "12"
     }
