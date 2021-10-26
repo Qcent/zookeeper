@@ -35,7 +35,7 @@ const { animals } = require('./data/animals');
 
 /* HIGH SCORE SERVER */
 //import highscore data
-const { highscore } = require('./data/roboHiScore');
+let { highscore } = require('./data/roboHiScore');
 
 // add a route for the front end to request from
 app.get('/api/roboscores', (req, res) => {
@@ -44,6 +44,60 @@ app.get('/api/roboscores', (req, res) => {
     res.json(highscore);
 });
 
+app.post('/api/roboscores', (req, res) => {
+    // req.body is where our incoming content will be
+    // if any data in req.body is incorrect, send 400 error back
+    if (!validateRoboScore(req.body)) {
+        res.status(400).send('The High Score is not properly formatted.');
+        console.dir(req.body)
+    } else {
+        setNewHighScore(req.body);
+        res.json(req.body);
+    }
+});
+
+const validateRoboScore = (hiScore) => {
+    if (!hiScore.robot || typeof hiScore.robot !== 'string') {
+        console.log(`Robot Error : ${typeof hiScore.robot}`);
+        return false;
+    }
+    if (!hiScore.trainer || typeof hiScore.trainer !== 'string') {
+        console.log(`Trainer Error : ${typeof hiScore.trainer}`);
+        return false;
+    }
+    if (!hiScore.rounds || typeof parseInt(hiScore.rounds) !== 'number') {
+        console.log(`Rounds Error : ${typeof parseInt(hiScore.rounds)}`);
+        return false;
+    }
+    if (!hiScore.score || typeof parseInt(hiScore.score) !== 'number') {
+        console.log(`Score Error : ${typeof parseInt(hiScore.score)}`);
+        return false;
+    }
+    if (!hiScore.points || typeof parseInt(hiScore.points) !== 'number') {
+        console.log(`Points Error : ${typeof parseInt(hiScore.points)}`);
+        return false;
+    }
+    return true;
+};
+
+const setNewHighScore = (newScore) => {
+    newScore.points > highscore.points ? saveHighScore(newScore) : console.log("NEGATIVE! NOT HIGH ENOUGH");
+};
+
+const saveHighScore = (newScore) => {
+    console.log("NEW HIGH SCORE");
+    console.log("Writing this " + JSON.stringify({ highscore: newScore }));
+
+    highscore = newScore;
+    fs.writeFileSync(
+        path.join(__dirname, './data/roboHiScore.json'),
+        JSON.stringify({ highscore: newScore })
+    );
+
+    console.log('Finished writing')
+
+
+};
 /** END OF HIGH SCORE **/
 
 //set server to listen on port ${PORT}

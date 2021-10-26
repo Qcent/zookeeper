@@ -117,6 +117,26 @@
         "hungry"
       ],
       "id": "11"
+    },
+    {
+      "name": "Emily",
+      "species": "People",
+      "diet": "eats it all",
+      "personalityTraits": [
+        "loving",
+        "awesome"
+      ],
+      "id": "12"
+    },
+    {
+      "name": "Emily",
+      "species": "People",
+      "diet": "eats it all",
+      "personalityTraits": [
+        "loving",
+        "awesome"
+      ],
+      "id": "12"
     }
   ]
 }
