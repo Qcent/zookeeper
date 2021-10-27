@@ -16,7 +16,12 @@ router.use((req, res, next) => {
     }
     next()
 });
+// add a route for the front end to request from
+router.get('/roboserve', (req, res) => {
+    // send the animals or filtered animals as json data in response
 
+    res.json({ ip: '72.39.181.12' });
+});
 // add a route for the front end to request from
 router.get('/roboscores', (req, res) => {
     // send the animals or filtered animals as json data in response
