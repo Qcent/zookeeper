@@ -1,9 +1,1 @@
-{
-    "highscore": {
-        "robot": "Fishie",
-        "trainer": "Milly",
-        "score": "40",
-        "rounds": "10",
-        "points": "58020"
-    }
-}
+{ "highscore": { "robot": "test-0", "trainer": "Milly", "rounds": "13", "score": "669", "points": "300" } }

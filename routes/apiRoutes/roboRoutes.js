@@ -3,6 +3,10 @@ const router = require('express').Router();
 let { highscore } = require('../../data/roboHiScore');
 //////////////////////////////
 /* HIGH SCORE SERVER */
+const path = require('path');
+const fs = require('fs');
+const fetch = (...args) =>
+    import ('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 router.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -19,9 +23,52 @@ router.use((req, res, next) => {
 // add a route for the front end to request from
 router.get('/roboserve', (req, res) => {
     // send the animals or filtered animals as json data in response
+    // res.json({ ip: '72.39.181.12' });
 
-    res.json({ ip: '72.39.181.12' });
+    let apiCall = "http://theflame:3001/api/roboscores";
+
+    return new Promise((resolve, reject) => {
+        fetch(apiCall)
+            .then((response) => {
+                if (response.ok) {
+                    response.json()
+                        .then(data => {
+                            res.json(data);
+
+                            resolve({
+                                ok: true,
+                                message: 'Got Hi Score'
+                            })
+                        })
+                } else {
+                    reject({
+                        ok: false,
+                        message: 'Bad Response'
+                    })
+                }
+            }).catch(err => console.log(err))
+    });
 });
+
+router.post('/roboserve', (req, res) => {
+    // req.body is where our incoming content will be
+    // if any data in req.body is incorrect, send 400 error back
+    if (!validateRoboScore(req.body)) {
+        res.status(400).send('The High Score is not properly formatted. ' + req.body.name);
+        console.dir(req.body)
+    } else {
+        setRemoteHighScore(req.body)
+            .then(data => {
+                res.json(data);
+            }).catch(err => {
+                console.log(err);
+                res.json(err);
+            });
+    }
+});
+
+
+
 // add a route for the front end to request from
 router.get('/roboscores', (req, res) => {
     // send the animals or filtered animals as json data in response
@@ -101,7 +148,7 @@ const saveHighScore = (newScore) => {
 
     return new Promise((resolve, reject) => {
         fs.writeFile(
-            path.join(__dirname, './data/roboHiScore.json'),
+            path.join(__dirname, '../../data/roboHiScore.json'),
             JSON.stringify({ highscore: newScore }),
             err => {
                 // if there's an error, reject the Promise and send the error to the Promise's `.catch()` method
@@ -122,6 +169,30 @@ const saveHighScore = (newScore) => {
 
 
 
+};
+const setRemoteHighScore = newScore => {
+    // res.json({ ip: '72.39.181.12' });
+    let apiCall = "http://theflame:3001/api/roboscores";
+    return new Promise((resolve, reject) => {
+        fetch(apiCall, {
+            method: 'POST',
+            body: JSON.stringify(newScore),
+            headers: { 'Content-Type': 'application/json' }
+        }).then((response) => {
+            if (response.ok) {
+                console.dir(response)
+                resolve({
+                    ok: true,
+                    message: 'Got Hi Score'
+                });
+            } else {
+                reject({
+                    ok: false,
+                    message: 'Bad Response'
+                })
+            }
+        }).catch(err => console.log(err))
+    });
 };
 /** END OF HIGH SCORE **/
 //////////////////////////////
