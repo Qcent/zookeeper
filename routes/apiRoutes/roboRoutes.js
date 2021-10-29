@@ -46,7 +46,10 @@ router.get('/roboserve', (req, res) => {
                         message: 'Bad Response'
                     })
                 }
-            }).catch(err => console.log(err))
+            }).catch(err => {
+                console.log(err);
+                res.json(err)
+            })
     });
 });
 
