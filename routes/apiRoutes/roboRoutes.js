@@ -5,6 +5,7 @@ let { highscore } = require('../../data/roboHiScore');
 /* HIGH SCORE SERVER */
 const path = require('path');
 const fs = require('fs');
+/*
 const fetch = (...args) =>
     import ('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -20,6 +21,9 @@ router.use((req, res, next) => {
     }
     next()
 });
+*/
+/*
+
 // add a route for the front end to request from
 router.get('/roboserve', (req, res) => {
     // send the animals or filtered animals as json data in response
@@ -57,7 +61,7 @@ router.post('/roboserve', (req, res) => {
     // req.body is where our incoming content will be
     // if any data in req.body is incorrect, send 400 error back
     if (!validateRoboScore(req.body)) {
-        res.status(400).send('The High Score is not properly formatted. ' + req.body.name);
+        res.status(400).send('The High Score is not properly formatted. ' + req.body.robot);
         console.dir(req.body)
     } else {
         setRemoteHighScore(req.body)
@@ -93,7 +97,7 @@ const setRemoteHighScore = newScore => {
         }).catch(err => console.log(err))
     });
 };
-
+*/
 
 // add a route for the front end to request from
 router.get('/roboscores', (req, res) => {
