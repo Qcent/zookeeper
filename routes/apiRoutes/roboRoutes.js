@@ -25,7 +25,7 @@ router.get('/roboserve', (req, res) => {
     // send the animals or filtered animals as json data in response
     // res.json({ ip: '72.39.181.12' });
 
-    let apiCall = "http://theflame:3001/api/roboscores";
+    let apiCall = "http://72.39.181.12:3001/api/roboscores";
 
     return new Promise((resolve, reject) => {
         fetch(apiCall)
@@ -66,7 +66,30 @@ router.post('/roboserve', (req, res) => {
             });
     }
 });
-
+const setRemoteHighScore = newScore => {
+    // res.json({ ip: '72.39.181.12' });
+    let apiCall = "http://72.39.181.12:3001/api/roboscores";
+    return new Promise((resolve, reject) => {
+        fetch(apiCall, {
+            method: 'POST',
+            body: JSON.stringify(newScore),
+            headers: { 'Content-Type': 'application/json' }
+        }).then((response) => {
+            if (response.ok) {
+                console.dir(response)
+                resolve({
+                    ok: true,
+                    message: 'Got Hi Score'
+                });
+            } else {
+                reject({
+                    ok: false,
+                    message: 'Bad Response'
+                })
+            }
+        }).catch(err => console.log(err))
+    });
+};
 
 
 // add a route for the front end to request from
@@ -170,30 +193,7 @@ const saveHighScore = (newScore) => {
 
 
 };
-const setRemoteHighScore = newScore => {
-    // res.json({ ip: '72.39.181.12' });
-    let apiCall = "http://theflame:3001/api/roboscores";
-    return new Promise((resolve, reject) => {
-        fetch(apiCall, {
-            method: 'POST',
-            body: JSON.stringify(newScore),
-            headers: { 'Content-Type': 'application/json' }
-        }).then((response) => {
-            if (response.ok) {
-                console.dir(response)
-                resolve({
-                    ok: true,
-                    message: 'Got Hi Score'
-                });
-            } else {
-                reject({
-                    ok: false,
-                    message: 'Bad Response'
-                })
-            }
-        }).catch(err => console.log(err))
-    });
-};
+
 /** END OF HIGH SCORE **/
 //////////////////////////////
 
